@@ -7,13 +7,6 @@ export const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
 
-  const roles = [
-    "Cybersecurity Analyst",
-    "Penetration Tester",
-    "SOC Analyst",
-    "AI & Software Engineer"
-  ];
-
   useEffect(() => {
     // Initial reveal animation
     const ctx = gsap.context(() => {
