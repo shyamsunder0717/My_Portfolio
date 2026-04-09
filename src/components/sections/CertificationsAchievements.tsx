@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { FaAward, FaTrophy, FaCheckCircle } from 'react-icons/fa';
 
 const certifications = [
+  "Certified Blue Team Practitioner (CBTP)",
   "Certified Network Security Practitioner (CNSP)",
   "Certified AppSec Practitioner (CAP)",
   "Certified Cyber Security Analyst (C3SA)",
@@ -34,14 +35,14 @@ export const CertificationsAchievements = () => {
   return (
     <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        
+
         {/* Certifications */}
         <div>
           <div className="mb-12">
             <h2 className="text-4xl font-bold mb-4 font-sans tracking-tight">Certifications</h2>
             <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full" />
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {certifications.map((cert, idx) => (
               <motion.div
@@ -69,7 +70,7 @@ export const CertificationsAchievements = () => {
             <h2 className="text-4xl font-bold mb-4 font-sans tracking-tight">Achievements</h2>
             <div className="w-16 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full" />
           </div>
-          
+
           <div className="space-y-6">
             {achievements.map((item, idx) => (
               <motion.div

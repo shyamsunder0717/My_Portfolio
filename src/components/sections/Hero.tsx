@@ -59,7 +59,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 1 }}
             className="text-gray-400 max-w-lg text-lg leading-relaxed"
           >
-            Expertise bridging the gap between offensive security, SOC operations, Software Engineer and AI-driven development.
+            Expertise bridging the gap between offensive security, SOC operations, Development and AI-driven development.
           </motion.p>
 
           {/* CTAs */}

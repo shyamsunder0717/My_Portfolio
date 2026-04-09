@@ -9,12 +9,43 @@ export const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const skills = {
-    "Languages": ["Python", "Java", "SQL", "HTML", "CSS", "Bash"],
-    "Cybersecurity": ["Penetration Testing", "SOC", "Networking", "SIEM", "OWASP Top 10", "Cryptography", "Burp Suite", "Nmap", "Wireshark", "Metasploit", "Wazuh"],
-    "Cloud & AI": ["GCP", "Azure", "Researcher", "LLMs", "GPT", "Gemini"],
-    "Development": ["SDLC", "Web Development", "API Integration", "FastAPI", "Spring Boot", "REST APIs", "MySQL", "Docker", "Git", "GitHub Actions"]
-  };
+  const skillCategories = [
+    {
+      id: "cybersecurity",
+      label: "CYBERSECURITY",
+      tier: "hero",
+      items: [
+        "Penetration Testing", "SOC", "SIEM", "Networking",
+        "OWASP Top 10", "Cryptography", "Application Security",
+        "Burp Suite", "Nmap", "Wireshark", "Metasploit", "Wazuh", "Aircrack-ng"
+      ]
+    },
+    {
+      id: "security-research",
+      label: "SECURITY RESEARCH",
+      tier: "mid",
+      items: [
+        "Vulnerability Research", "Threat Analysis", "OSINT",
+        "Technical Documentation", "Remediation Reporting"
+      ]
+    },
+    {
+      id: "languages",
+      label: "LANGUAGES & SCRIPTING",
+      tier: "base",
+      items: ["Python", "Bash", "SQL", "Java"]
+    },
+    {
+      id: "tools",
+      label: "SUPPORTING TOOLS",
+      tier: "base",
+      items: [
+        "Git", "Docker", "GCP", "Oracle Cloud", "FastAPI",
+        "API Integration", "REST APIs", "MySQL", "GitHub Actions",
+        "LLM APIs (Gemini · GPT)"
+      ]
+    }
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -56,11 +87,7 @@ export const About = () => {
         {/* Bio Card */}
         <div ref={addToCardsRef} className="lg:col-span-12 glassmorphism-glow rounded-3xl p-8 md:p-12">
           <p className="text-lg md:text-xl text-gray-300 leading-relaxed font-light">
-            CSE Hons. Information Security graduate passionate about Cybersecurity, AI, and Development.
-            Experienced in penetration testing, SOC operations, SIEM monitoring, and building secure
-            intelligent systems combining <span className="text-cyan-400 font-medium">Cybersecurity</span>,
-            <span className="text-purple-400 font-medium"> AI</span>, and
-            <span className="text-cyan-400 font-medium"> Software Engineering</span>.
+            CSE Hons. Information Security graduate with hands-on experience in penetration testing, SOC operations, SIEM-based threat detection, and vulnerability research. I find weaknesses in systems, analyze threats, and build security tools using Python — with working knowledge of modern AI APIs and cloud platforms to support security workflows.
           </p>
         </div>
 
@@ -92,23 +119,95 @@ export const About = () => {
           <h3 className="text-2xl font-semibold text-white mb-8">Technical Arsenal</h3>
 
           <div className="space-y-8">
-            {Object.entries(skills).map(([category, items], idx) => (
-              <div key={idx}>
-                <h5 className="text-sm uppercase tracking-widest text-gray-500 mb-4">{category}</h5>
-                <div className="flex flex-wrap gap-3">
-                  {items.map((skill, sIdx) => (
-                    <motion.span
-                      key={sIdx}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.1 * (sIdx % 5) }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      className="interactive px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:bg-white/10 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors cursor-none"
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
+            {skillCategories.map((cat) => (
+              <div key={cat.id}>
+                {/* Category header */}
+                {cat.tier === 'hero' ? (
+                  <h5
+                    className="text-base uppercase tracking-widest mb-4 font-bold"
+                    style={{
+                      color: '#22d3ee',
+                      textShadow: '0 0 12px rgba(34,211,238,0.8), 0 0 28px rgba(34,211,238,0.4)',
+                    }}
+                  >
+                    {cat.label}
+                  </h5>
+                ) : cat.tier === 'mid' ? (
+                  <h5 className="text-sm uppercase tracking-widest text-purple-400/80 mb-4 font-semibold">
+                    {cat.label}
+                  </h5>
+                ) : cat.tier === 'base' ? (
+                  <h5 className="text-xs uppercase tracking-widest text-gray-400 mb-4 font-medium">
+                    {cat.label}
+                  </h5>
+                ) : (
+                  <h5 className="text-xs uppercase tracking-widest text-gray-600 mb-4">
+                    {cat.label}
+                  </h5>
+                )}
+
+                {/* Divider */}
+                <div
+                  className="w-full h-px mb-4"
+                  style={{
+                    background:
+                      cat.tier === 'hero'
+                        ? 'linear-gradient(to right, rgba(34,211,238,0.5), transparent)'
+                        : cat.tier === 'mid'
+                          ? 'linear-gradient(to right, rgba(168,85,247,0.3), transparent)'
+                          : cat.tier === 'base'
+                            ? 'linear-gradient(to right, rgba(255,255,255,0.15), transparent)'
+                            : 'linear-gradient(to right, rgba(255,255,255,0.05), transparent)',
+                  }}
+                />
+
+                {/* Pills */}
+                <div className="flex flex-wrap gap-2">
+                  {cat.items.map((skill, sIdx) => {
+                    const isHero = cat.tier === 'hero';
+                    const isMid = cat.tier === 'mid';
+                    const isBase = cat.tier === 'base';
+
+                    return (
+                      <motion.span
+                        key={sIdx}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.05 * (sIdx % 8) }}
+                        whileHover={{ scale: 1.06, y: -2 }}
+                        className="interactive cursor-none transition-all duration-200"
+                        style={{
+                          padding: isHero ? '8px 18px' : isMid ? '5px 14px' : '4px 11px',
+                          borderRadius: '9999px',
+                          fontSize: isHero ? '0.9rem' : isMid ? '0.78rem' : '0.7rem',
+                          fontWeight: isHero ? 600 : 400,
+                          background: isHero
+                            ? 'rgba(34,211,238,0.08)'
+                            : isMid
+                              ? 'rgba(168,85,247,0.06)'
+                              : isBase
+                                ? 'rgba(255,255,255,0.05)'
+                                : 'rgba(255,255,255,0.02)',
+                          border: isHero
+                            ? '1px solid rgba(34,211,238,0.4)'
+                            : isMid
+                              ? '1px solid rgba(168,85,247,0.25)'
+                              : isBase
+                                ? '1px solid rgba(255,255,255,0.15)'
+                                : '1px solid rgba(255,255,255,0.05)',
+                          color: isHero ? '#67e8f9' : isMid ? '#c4b5fd' : isBase ? '#d1d5db' : '#6b7280',
+                          boxShadow: isHero
+                            ? '0 0 10px rgba(34,211,238,0.2), inset 0 0 8px rgba(34,211,238,0.05)'
+                            : isMid
+                              ? '0 0 6px rgba(168,85,247,0.1)'
+                              : 'none',
+                        }}
+                      >
+                        {skill}
+                      </motion.span>
+                    );
+                  })}
                 </div>
               </div>
             ))}

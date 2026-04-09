@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
 
@@ -18,7 +18,7 @@ const projects: Project[] = [
     title: "DeepGuard AI — Deepfake Detection",
     date: "In Progress",
     stack: ["FastAPI", "OpenCV", "NumPy", "Python", "AI"],
-    category: "AI/ML",
+    category: "Cybersecurity/AI",
     description: "AI-powered deepfake detection analyzing images/videos using forensic signals — noise, compression, metadata, face integrity — to generate explainable authenticity verdicts.",
     status: "In Progress"
   },
@@ -26,14 +26,14 @@ const projects: Project[] = [
     title: "Emissions Dashboard + RAG Chat",
     date: "Dec 2025",
     stack: ["Python", "Streamlit", "Plotly", "Pandas", "Gemini API", "Custom Search API"],
-    category: "AI/ML",
+    category: "AI",
     description: "AI-powered emissions analytics dashboard with RAG-based chat assistant using Gemini to answer dataset queries and generate real-time external insights."
   },
   {
     title: "AI Language Translator",
     date: "Jul 2025",
     stack: ["React.js", "TypeScript", "Tailwind CSS", "Gemini API"],
-    category: "AI/ML",
+    category: "AI",
     github: "https://github.com/shyamsunder0717/AI-Language-Translator",
     description: "Real-time language translation web app with auto-detect, instant language swap, and one-click copy. Buildless architecture using ES Modules and import maps. API key managed securely via environment variables."
   },
@@ -101,7 +101,7 @@ const projects: Project[] = [
   }
 ];
 
-const filters = ["All", "AI/ML", "Cybersecurity", "Web Dev"];
+
 
 const TiltCard = ({ project }: { project: Project }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -151,7 +151,7 @@ const TiltCard = ({ project }: { project: Project }) => {
     >
       {/* Internal hover glow effect */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-cyan-500/10 to-purple-500/10 pointer-events-none -z-10 shadow-[0_0_20px_rgba(0,245,255,0.15)]" />
-      
+
       <div style={{ transform: "translateZ(30px)" }} className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{project.title}</h3>
@@ -167,15 +167,15 @@ const TiltCard = ({ project }: { project: Project }) => {
             )}
           </div>
         </div>
-        
+
         {/* Actions */}
         <div className="flex gap-2 shrink-0 ml-4">
           {project.github && (
-            <a 
+            <a
               href={project.github}
               target="_blank"
               rel="noreferrer"
-              className="interactive w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 transition-colors text-white" 
+              className="interactive w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 transition-colors text-white"
               aria-label="GitHub Repository"
             >
               <FaGithub size={18} />
@@ -193,8 +193,8 @@ const TiltCard = ({ project }: { project: Project }) => {
 
       <div style={{ transform: "translateZ(40px)" }} className="flex flex-wrap gap-2 mt-auto">
         {project.stack.map((tech, idx) => (
-          <span 
-            key={idx} 
+          <span
+            key={idx}
             className="text-xs font-medium px-3 py-1 rounded-full bg-black/40 border border-gray-700 text-gray-300 shadow-sm"
           >
             {tech}
@@ -206,73 +206,31 @@ const TiltCard = ({ project }: { project: Project }) => {
 };
 
 export const Projects = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const filteredProjects = projects.filter(
-    (project) => activeFilter === "All" || project.category === activeFilter
-  );
-
   return (
     <section id="projects" className="relative z-10 py-24 px-6 max-w-7xl mx-auto min-h-screen">
       <div className="mb-12">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 font-sans tracking-tight text-center md:text-left">Featured Projects</h2>
         <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mx-auto md:mx-0 mb-10" />
-        
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`interactive px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
-                activeFilter === filter 
-                  ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_15px_rgba(0,245,255,0.4)] hover:scale-105' 
-                  : 'bg-white/5 text-gray-300 border-white/10 hover:border-cyan-500/50 hover:text-cyan-400 hover:bg-white/10'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
       </div>
 
-      <motion.div 
+      <motion.div
         layout
         className="grid grid-cols-1 lg:grid-cols-2 gap-8 perspective-[1000px] min-h-[300px] w-full"
       >
         <AnimatePresence mode="popLayout">
-          {filteredProjects.length > 0 ? (
-            filteredProjects.map((project, idx) => (
-              <motion.div
-                layout
-                key={project.title}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="w-full"
-              >
-                <TiltCard project={project} />
-              </motion.div>
-            ))
-          ) : (
+          {projects.map((project, idx) => (
             <motion.div
               layout
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="col-span-1 lg:col-span-2 flex flex-col items-center justify-center py-20 glassmorphism-glow rounded-3xl border border-white/5"
+              key={project.title}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              className="w-full"
             >
-              <div className="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4">
-                <span className="text-cyan-500 text-2xl">⚡</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Deploying Soon</h3>
-              <p className="text-gray-400 text-center max-w-sm">
-                No projects are currently published under the <span className="text-cyan-400">{activeFilter}</span> category. Check back later for updates!
-              </p>
+              <TiltCard project={project} />
             </motion.div>
-          )}
+          ))}
         </AnimatePresence>
       </motion.div>
     </section>
