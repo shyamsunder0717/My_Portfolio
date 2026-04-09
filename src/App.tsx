@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { SmoothScroll } from './components/layout/SmoothScroll';
 import { HeroCanvas } from './components/canvas/HeroCanvas';
@@ -22,6 +23,7 @@ function App() {
         <CertificationsAchievements />
         <Contact />
       </main>
+      <Analytics />
     </SmoothScroll>
   );
 }
