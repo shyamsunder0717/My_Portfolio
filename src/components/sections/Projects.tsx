@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
-import { FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaLock, FaBrain, FaCode } from 'react-icons/fa';
 
 interface Project {
   title: string;
@@ -12,6 +12,33 @@ interface Project {
   github?: string;
 }
 
+const CATEGORY_META: Record<string, { color: string; glow: string; border: string; icon: React.ReactNode }> = {
+  'Cybersecurity/AI': {
+    color: 'text-rose-400',
+    glow: 'from-rose-500/20 to-purple-500/20',
+    border: 'hover:border-rose-500/50',
+    icon: <FaLock size={11} />,
+  },
+  'AI': {
+    color: 'text-violet-400',
+    glow: 'from-violet-500/20 to-cyan-500/20',
+    border: 'hover:border-violet-500/50',
+    icon: <FaBrain size={11} />,
+  },
+  'Cybersecurity': {
+    color: 'text-cyan-400',
+    glow: 'from-cyan-500/20 to-blue-500/20',
+    border: 'hover:border-cyan-500/50',
+    icon: <FaLock size={11} />,
+  },
+  'Web Dev': {
+    color: 'text-emerald-400',
+    glow: 'from-emerald-500/20 to-cyan-500/20',
+    border: 'hover:border-emerald-500/50',
+    icon: <FaCode size={11} />,
+  },
+};
+
 const projects: Project[] = [
   // AI / ML
   {
@@ -19,6 +46,7 @@ const projects: Project[] = [
     date: "In Progress",
     stack: ["FastAPI", "OpenCV", "NumPy", "Python", "AI"],
     category: "Cybersecurity/AI",
+    github: "https://github.com/shyamsunder0717/DeepGuard-AI",
     description: "AI-powered deepfake detection analyzing images/videos using forensic signals — noise, compression, metadata, face integrity — to generate explainable authenticity verdicts.",
     status: "In Progress"
   },
@@ -27,6 +55,7 @@ const projects: Project[] = [
     date: "Dec 2025",
     stack: ["Python", "Streamlit", "Plotly", "Pandas", "Gemini API", "Custom Search API"],
     category: "AI",
+    github: "https://github.com/shyamsunder0717/Emissions-Dashboard",
     description: "AI-powered emissions analytics dashboard with RAG-based chat assistant using Gemini to answer dataset queries and generate real-time external insights."
   },
   {
@@ -35,7 +64,7 @@ const projects: Project[] = [
     stack: ["React.js", "TypeScript", "Tailwind CSS", "Gemini API"],
     category: "AI",
     github: "https://github.com/shyamsunder0717/AI-Language-Translator",
-    description: "Real-time language translation web app with auto-detect, instant language swap, and one-click copy. Buildless architecture using ES Modules and import maps. API key managed securely via environment variables."
+    description: "Real-time language translation web app with auto-detect, instant language swap, and one-click copy. Buildless architecture using ES Modules and import maps."
   },
 
   // Cybersecurity
@@ -48,12 +77,20 @@ const projects: Project[] = [
     description: "Real-time log analysis and alerting system reducing detection time by 40%. Custom alert rules, log parsing from multiple sources, dashboards for key security metrics, and compliance management across distributed Linux environments."
   },
   {
-    title: "Vulnerability Scanner",
+    title: "Vulnerability Scanner (Python)",
     date: "Apr 2024",
     stack: ["Python", "Flask", "Beautiful Soup", "API Testing"],
     category: "Cybersecurity",
     github: "https://github.com/shyamsunder0717/Vulnerability_Scanner_Python_Based",
-    description: "Two scanners: a Python-based tool for system vulnerability detection with automated reporting, and a web-based scanner for real-time browser-based security assessments. Multi-threaded scanning covering OWASP Top 10."
+    description: "Python-based vulnerability detection tool with automated reporting, multi-threaded scanning covering OWASP Top 10, and comprehensive system security assessments."
+  },
+  {
+    title: "Vulnerability Scanner (Website)",
+    date: "Apr 2024",
+    stack: ["JavaScript", "HTML", "CSS", "Web Security"],
+    category: "Cybersecurity",
+    github: "https://github.com/shyamsunder0717/Vulnerability_Scanner_Website_Based",
+    description: "Web-based vulnerability scanner for real-time browser-based security assessments, covering OWASP Top 10 vulnerabilities with an intuitive dashboard interface."
   },
   {
     title: "Wi-Fi De-Authentication Tool",
@@ -72,7 +109,7 @@ const projects: Project[] = [
 
   // Web Dev
   {
-    title: "Full-Stack URL Shortener with Analytics",
+    title: "Full-Stack URL Shortener",
     stack: ["Node.js", "Express.js", "JavaScript", "Docker", "Google Cloud Run"],
     category: "Web Dev",
     github: "https://github.com/shyamsunder0717/URL-Shortener-Site",
@@ -101,10 +138,9 @@ const projects: Project[] = [
   }
 ];
 
-
-
-const TiltCard = ({ project }: { project: Project }) => {
+const TiltCard = ({ project, index }: { project: Project; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const meta = CATEGORY_META[project.category] ?? CATEGORY_META['Web Dev'];
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -118,16 +154,10 @@ const TiltCard = ({ project }: { project: Project }) => {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
-    x.set(xPct * 15);
-    y.set(yPct * -15);
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+    x.set(xPct * 12);
+    y.set(yPct * -12);
   };
 
   const handleMouseLeave = () => {
@@ -135,71 +165,108 @@ const TiltCard = ({ project }: { project: Project }) => {
     y.set(0);
   };
 
-  // Convert array to grid logic - if it ends up single column on mobile, handled by generic w-full
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       layout
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative w-full rounded-2xl glassmorphism p-8 flex flex-col h-full border border-white/10 group will-change-transform cursor-pointer"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.06, ease: 'easeOut' }}
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      className={`relative w-full rounded-2xl flex flex-col h-full group will-change-transform cursor-pointer overflow-hidden
+        border border-white/8 ${meta.border} transition-[border-color] duration-300
+        bg-gradient-to-br from-white/4 to-white/1 backdrop-blur-xl`}
     >
-      {/* Internal hover glow effect */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-cyan-500/10 to-purple-500/10 pointer-events-none -z-10 shadow-[0_0_20px_rgba(0,245,255,0.15)]" />
+      {/* Animated gradient glow on hover */}
+      <div
+        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${meta.glow} pointer-events-none`}
+      />
 
-      <div style={{ transform: "translateZ(30px)" }} className="flex justify-between items-start mb-6">
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{project.title}</h3>
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm font-mono text-cyan-400">{project.category}</span>
-            {project.date && (
-              <span className="text-sm text-gray-500">• {project.date}</span>
-            )}
-            {project.status && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                {project.status}
-              </span>
-            )}
-          </div>
+      {/* Top shimmer line */}
+      <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:via-white/40 transition-all duration-500`} />
+
+      {/* Index badge */}
+      <div
+        className="absolute top-4 right-4 text-xs font-mono text-white/15 select-none"
+        style={{ transform: 'translateZ(10px)' }}
+      >
+        #{String(index + 1).padStart(2, '0')}
+      </div>
+
+      {/* Card body */}
+      <div className="flex flex-col h-full p-6 md:p-7" style={{ transform: 'translateZ(20px)' }}>
+
+        {/* Category badge */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${meta.color} border-current/30 bg-current/5`}>
+            {meta.icon}
+            {project.category}
+          </span>
+          {project.date && (
+            <span className="text-xs text-white/30 font-mono">{project.date}</span>
+          )}
+          {project.status && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-pulse">
+              ● {project.status}
+            </span>
+          )}
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-2 shrink-0 ml-4">
-          {project.github && (
+        {/* Title */}
+        <h3 className={`text-lg md:text-xl font-bold text-white mb-3 leading-snug group-hover:${meta.color} transition-colors duration-300`}>
+          {project.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm text-white/50 flex-grow leading-relaxed mb-5">
+          {project.description}
+        </p>
+
+        {/* Stack chips */}
+        <div className="flex flex-wrap gap-1.5 mb-6">
+          {project.stack.map((tech, idx) => (
+            <span
+              key={idx}
+              className="text-xs font-medium px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white/60"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        {/* CTA row — both buttons link to GitHub */}
+        {project.github && (
+          <div className="flex gap-3 mt-auto pt-4 border-t border-white/8">
             <a
               href={project.github}
               target="_blank"
               rel="noreferrer"
-              className="interactive w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/20 transition-colors text-white"
-              aria-label="GitHub Repository"
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold
+                bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20
+                text-white/70 hover:text-white transition-all duration-200`}
+              aria-label="View on GitHub"
             >
-              <FaGithub size={18} />
+              <FaGithub size={15} />
+              GitHub
             </a>
-          )}
-          <button className="interactive w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-cyan-500/20 hover:text-cyan-400 transition-colors text-white" aria-label="Details">
-            <FaExternalLinkAlt size={16} />
-          </button>
-        </div>
-      </div>
-
-      <p style={{ transform: "translateZ(20px)" }} className="text-gray-400 flex-grow mb-6 leading-relaxed text-sm md:text-base">
-        {project.description}
-      </p>
-
-      <div style={{ transform: "translateZ(40px)" }} className="flex flex-wrap gap-2 mt-auto">
-        {project.stack.map((tech, idx) => (
-          <span
-            key={idx}
-            className="text-xs font-medium px-3 py-1 rounded-full bg-black/40 border border-gray-700 text-gray-300 shadow-sm"
-          >
-            {tech}
-          </span>
-        ))}
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold
+                bg-gradient-to-r from-cyan-500/20 to-purple-500/20
+                hover:from-cyan-500/30 hover:to-purple-500/30
+                border border-cyan-500/20 hover:border-cyan-400/40
+                text-cyan-300 hover:text-cyan-200 transition-all duration-200`}
+              aria-label="View Repository"
+            >
+              <FaExternalLinkAlt size={13} />
+              View Repo
+            </a>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -207,31 +274,91 @@ const TiltCard = ({ project }: { project: Project }) => {
 
 export const Projects = () => {
   return (
-    <section id="projects" className="relative z-10 py-24 px-6 max-w-7xl mx-auto min-h-screen">
-      <div className="mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 font-sans tracking-tight text-center md:text-left">Featured Projects</h2>
-        <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mx-auto md:mx-0 mb-10" />
+    <section id="projects" className="relative z-10 py-28 px-6 max-w-7xl mx-auto">
+
+      {/* Section header */}
+      <div className="mb-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-cyan-400 uppercase mb-4 px-4 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/5"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          Portfolio
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-4xl md:text-6xl font-extrabold text-white mb-5 tracking-tight"
+        >
+          Featured{' '}
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+            Projects
+          </span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-white/40 text-base max-w-xl mx-auto"
+        >
+          A curated showcase of cybersecurity tools, AI systems, and full-stack applications.
+        </motion.p>
+
+        {/* Decorative divider */}
+        <div className="mt-8 flex items-center gap-4 justify-center">
+          <div className="h-px w-20 bg-gradient-to-r from-transparent to-cyan-500/50" />
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+          <div className="h-px w-20 bg-gradient-to-l from-transparent to-purple-500/50" />
+        </div>
       </div>
 
+      {/* Project grid */}
       <motion.div
         layout
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 perspective-[1000px] min-h-[300px] w-full"
+        className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 perspective-[1200px]"
       >
         <AnimatePresence mode="popLayout">
           {projects.map((project, idx) => (
             <motion.div
               layout
               key={project.title}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              exit={{ opacity: 0, scale: 0.85 }}
               className="w-full"
             >
-              <TiltCard project={project} />
+              <TiltCard project={project} index={idx} />
             </motion.div>
           ))}
         </AnimatePresence>
+      </motion.div>
+
+      {/* Footer note */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="mt-14 text-center"
+      >
+        <a
+          href="https://github.com/shyamsunder0717"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/4
+            text-white/50 hover:text-white hover:border-white/25 hover:bg-white/8
+            text-sm font-medium transition-all duration-300 group"
+        >
+          <FaGithub size={16} className="group-hover:text-cyan-400 transition-colors" />
+          View all repositories on GitHub
+          <FaExternalLinkAlt size={11} className="opacity-50" />
+        </a>
       </motion.div>
     </section>
   );

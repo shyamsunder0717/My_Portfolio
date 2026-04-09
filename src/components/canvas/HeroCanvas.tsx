@@ -1,24 +1,22 @@
-import { useRef, useMemo } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Torus, Points, PointMaterial, Float, MeshDistortMaterial, Icosahedron } from '@react-three/drei';
 import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 
+const particlesCount = 1500;
+const particlePositions = new Float32Array(particlesCount * 3);
+for (let i = 0; i < particlesCount; i++) {
+  particlePositions[i * 3] = (Math.random() - 0.5) * 20; // x
+  particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 20; // y
+  particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 10 - 5; // z
+}
+
 const ParticleField = () => {
   const pointsRef = useRef<THREE.Points>(null);
   
-  const particlesCount = 1500;
-  
-  const positions = useMemo(() => {
-    const arr = new Float32Array(particlesCount * 3);
-    for (let i = 0; i < particlesCount; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 20; // x
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 20; // y
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 10 - 5; // z
-    }
-    return arr;
-  }, []);
+  const positions = particlePositions;
 
   useFrame((state) => {
     if (pointsRef.current) {
