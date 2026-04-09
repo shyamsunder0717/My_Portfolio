@@ -48,7 +48,7 @@ export const Hero = () => {
 
             <div className="h-10 md:h-12 flex items-center">
               <span className="text-xl md:text-3xl text-purple-500 font-semibold inline-block">
-                Building Secure & Intelligent Systems
+                Building Secure & Defending Systems
               </span>
             </div>
           </div>
@@ -59,7 +59,8 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 1 }}
             className="text-gray-400 max-w-lg text-lg leading-relaxed"
           >
-            Expertise bridging the gap between offensive security, SOC operations, Development and AI-driven development.
+            Bridging offensive security and defense — with practical exposure
+            to security tooling, Python scripting, and AI-assisted workflows.
           </motion.p>
 
           {/* CTAs */}
