@@ -77,7 +77,7 @@ export const Hero = () => {
               View My Work
             </a>
             <a
-              href="https://drive.google.com/file/d/10OKePY9G-LkFBqZ4OqFe5lWBO26EnVrF/view?usp=sharing"
+              href="https://drive.google.com/file/d/17i9StSzqZpOKl6HNlgOoP96JpfkGtynk/view?usp=sharing"
               target="_blank"
               rel="noreferrer"
               className="interactive group px-8 py-3 rounded-full glassmorphism-glow flex items-center justify-center gap-3 font-medium transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(124,58,237,0.3)]"
