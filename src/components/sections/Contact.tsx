@@ -154,7 +154,7 @@ export const Contact = () => {
                 <span className="font-medium">shyamsunders0708@gmail.com</span>
               </a>
 
-              <a href="https://linkedin.com/in/shyam-sunder-sharma-987245s" target="_blank" rel="noreferrer" className="interactive flex items-center gap-4 text-gray-300 hover:text-purple-400 transition-colors group">
+              <a href="https://linkedin.com/in/shyamsunder07" target="_blank" rel="noreferrer" className="interactive flex items-center gap-4 text-gray-300 hover:text-purple-400 transition-colors group">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
                   <FaLinkedin size={20} />
                 </div>
